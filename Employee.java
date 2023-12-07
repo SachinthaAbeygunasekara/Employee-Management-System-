@@ -42,4 +42,5 @@ public class Employee {
     public void setEmployeeStatus(EmployeeStatus statusemployee) {this.statusemployee = statusemployee;}
     public EmployeeStatus getEmployeeStatus() {return statusemployee;}
 
+
 }
