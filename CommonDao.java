@@ -21,7 +21,7 @@ public class CommonDao {
         return rslt;
     }
 
-    public static String insert(String qry) {
+    public static String modify(String qry) {
 
         String msg ="0";
 
