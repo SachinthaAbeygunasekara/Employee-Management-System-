@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -29,5 +30,38 @@ public class EmployeeController {
 
         return employees;
         
+    }
+
+    public static String post(Employee employee) {
+        String msg="";
+        String err="";
+
+        LocalDate today = LocalDate.now();
+        int age = today.getYear() - employee.getDob().getYear();
+
+        if(age<20){
+            err = err +"\nMust be 20 years";
+        }
+
+        Employee empNic = EmployeeDao.getByNic(employee.getNic());
+
+        if (empNic != null) {
+            err = err + "\nNic Exits";
+        }
+
+        if (err.isEmpty()) {
+            String dberr = EmployeeDao.save(employee);
+            if (dberr.equals("1")) {
+                msg="1";
+            }else{
+                msg = "DB Error as : "+dberr;
+            }
+             
+        }
+        else{
+            msg = "Data Errors : \n"+err; 
+        }
+       
+        return msg;
     }
 }
