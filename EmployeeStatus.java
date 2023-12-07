@@ -26,4 +26,8 @@ public class EmployeeStatus {
     public String toString(){
         return name;
     }
+
+    public boolean equals(EmployeeStatus obj) {
+        return obj.id ==this.id;
+    }
 }
