@@ -22,7 +22,13 @@ public class Gender {
         return name;
     }
 
-    public String toString(){
+    @Override
+    public String toString() {
         return name;
     }
+    
+    public boolean equals(Gender obj) {
+        return obj.id ==this.id;
+    }
+
 }

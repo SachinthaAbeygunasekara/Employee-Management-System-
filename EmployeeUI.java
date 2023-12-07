@@ -19,6 +19,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 public class EmployeeUI extends JFrame {
@@ -49,6 +52,11 @@ public class EmployeeUI extends JFrame {
     Color valid;
     Color invalid;
     Color initial;
+
+    List<Employee> empList;
+    List<Gender> genList;
+    List<Designation> desigList;
+    List<EmployeeStatus> statusList;
 
     EmployeeUI() {
 
@@ -211,6 +219,12 @@ public class EmployeeUI extends JFrame {
             }
         });
 
+        tblEmployee.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                tblEmployeeVC(e);
+            }
+        });
+
         initialize();
     }
 
@@ -220,7 +234,7 @@ public class EmployeeUI extends JFrame {
     }
 
     public void loadForm() {
-        List<Gender> genList = GenderController.get();
+        genList = GenderController.get();
 
         Vector<Object> genders = new Vector();
         genders.add("Select a Gender");
@@ -232,8 +246,8 @@ public class EmployeeUI extends JFrame {
         DefaultComboBoxModel<Object> gndModel = new DefaultComboBoxModel(genders);
         cmdGender.setModel(gndModel);
 
-        List<Designation> desigList = DesignationController.get();
-        
+        desigList = DesignationController.get();
+
         Vector<Object> designations = new Vector();
         designations.add("Select a Designation");
 
@@ -244,7 +258,7 @@ public class EmployeeUI extends JFrame {
         DefaultComboBoxModel<Object> desigModel = new DefaultComboBoxModel(designations);
         cmdDesignation.setModel(desigModel);
 
-        List<EmployeeStatus> statusList = EmployeeStatusController.get();
+        statusList = EmployeeStatusController.get();
 
         Vector<Object> status = new Vector();
         status.add("Select a Status");
@@ -302,7 +316,7 @@ public class EmployeeUI extends JFrame {
     }
 
     public void setStyle(Color color) {
-        
+
         txtName.setBackground(color);
         cmdDobYear.setBackground(color);
         cmdDobMonth.setBackground(color);
@@ -316,10 +330,10 @@ public class EmployeeUI extends JFrame {
     }
 
     public void loadView() {
-        List<Employee> empList = EmployeeController.get(null);
+        empList = EmployeeController.get(null);
         filTable(empList);
 
-        List<Gender> genList = GenderController.get();
+        genList = GenderController.get();
 
         Vector<Object> genders = new Vector();
         genders.add("Select a Gender");
@@ -536,6 +550,48 @@ public class EmployeeUI extends JFrame {
             JOptionPane.showMessageDialog(null, error);
         }
 
+    }
+
+    public void tblEmployeeVC(ListSelectionEvent e) {
+        int row = tblEmployee.getSelectedRow();
+        Employee employee = empList.get(row);
+        filForm(employee);
+    }
+
+    public void filForm(Employee employee) {
+
+        txtName.setText(employee.getName());
+        cmdDobYear.setSelectedItem(employee.getDob().getYear());
+        cmdDobMonth.setSelectedItem(employee.getDob().getMonthValue());
+        cmdDobDate.setSelectedItem(employee.getDob().getDayOfMonth());
+
+        for (Gender gen : genList) {
+            if (gen.equals(employee.getGender())) {
+                cmdGender.setSelectedItem(gen);
+                break;
+            }
+        }
+
+        txtNic.setText(employee.getNic());
+        txtMobile.setText(employee.getMobile());
+        txtEmail.setText(employee.getEmail());
+
+        for (Designation desig : desigList) {
+            if (desig.equals(employee.getDesignation())) {
+                cmdDesignation.setSelectedItem(desig);
+                break;
+            }
+        }
+
+        for (EmployeeStatus sts : statusList) {
+            if (sts.equals(employee.getEmployeeStatus())) {
+                cmdemployeeStatus.setSelectedItem(sts);
+                break;
+            }
+        }
+
+        setStyle(valid);
+        enableButtons(false, true, true);
     }
 
 }

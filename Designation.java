@@ -25,4 +25,10 @@ public class Designation {
     public String toString(){
         return name;
     }
+    
+    public boolean equals(Designation obj) {
+        return obj.id ==this.id;
+    }
+
+    
 }
